@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading...</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at top left, #1e1b4b, #0f172a); 
+      min-height: 100vh; 
+      color: white; 
+      display: flex; 
+      flex-direction: column;
+      align-items: center; 
+      justify-content: center; 
+      padding: 20px; 
+      opacity: 0;
+      transition: opacity 0.5s ease-in;
+    }
+    
+    .glass { 
+      background: rgba(255, 255, 255, 0.05); 
+      backdrop-filter: blur(20px); 
+      border: 1px solid rgba(255, 255, 255, 0.1); 
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); 
+      border-radius: 1.5rem; 
+      padding: 2.5rem; 
+      width: 100%; 
+      max-width: 440px; 
+      margin-top: 2rem;
+    }
+
+    .input-control { 
+      background: rgba(30, 41, 59, 0.5); 
+      border: 1px solid rgba(255, 255, 255, 0.1); 
+      width: 100%; 
+      padding: 1rem 1.25rem; 
+      border-radius: 0.75rem; 
+      margin-top: 0.5rem; 
+      outline: none; 
+      transition: all 0.3s; 
+      color: white; 
+      font-size: 0.95rem;
+    }
+    
+    .input-control:focus { 
+      border-color: #6366f1; 
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); 
+    }
+
+    .btn-cta { 
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); 
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+      cursor: pointer;
+    }
+    
+    .btn-cta:hover { 
+      transform: translateY(-2px); 
+      filter: brightness(1.1);
+    }
+
+    .badge-campaign {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+    }
+
+    /* Overlay Loading saat aplikasi pertama kali dibuka */
+    #loader-overlay {
+      position: fixed;
+      inset: 0;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: opacity 0.5s ease;
+    }
+
+    .animate-in {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Screen (Hanya muncul saat sinkronisasi API) -->
+  <div id="loader-overlay">
+    <div class="flex flex-col items-center gap-4 text-center px-6">
+      <div id="loader-spinner" class="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+      <p id="loader-text" class="text-[10px] font-bold text-indigo-400 uppercase tracking-[0.3em] animate-pulse">Menghubungkan Server...</p>
+    </div>
+  </div>
+
+  <!-- Branding Header (Data Dinamis dari GAS) -->
+  <div class="text-center animate-in">
+    <div id="logoWrapper" class="hidden">
+      <img id="dynamicLogo" src="" alt="Logo" class="h-14 w-auto mx-auto mb-6 object-contain">
+    </div>
+    <h1 id="dynamicAppName" class="text-3xl font-extrabold tracking-tight text-white/90"></h1>
+    <p id="dynamicTagline" class="text-slate-400 text-sm mt-1"></p>
+  </div>
+
+  <!-- Card Utama -->
+  <div class="glass animate-in" style="animation-delay: 0.2s;">
+    
+    <!-- Bagian Form -->
+    <div id="formWrapper">
+      <h2 class="text-xl font-bold mb-8 text-center text-white">Daftar Sekarang</h2>
+      
+      <form id="leadForm" onsubmit="handleSubmit(event)" class="space-y-6">
+        <!-- Hidden input untuk menangkap Campaign ID -->
+        <input type="hidden" id="campaignInput" name="campaign" value="GENERAL">
+        
+        <!-- Field Nama -->
+        <div>
+          <label class="text-sm font-semibold text-slate-400 ml-1">Nama Lengkap</label>
+          <input type="text" name="nama" required placeholder="Contoh: Budi Santoso" class="input-control">
+        </div>
+
+        <!-- Field Email -->
+        <div>
+          <label class="text-sm font-semibold text-slate-400 ml-1">Email Aktif</label>
+          <input type="email" name="email" required placeholder="budi@email.com" class="input-control">
+        </div>
+
+        <!-- Field WhatsApp -->
+        <div>
+          <label class="text-sm font-semibold text-slate-400 ml-1">Nomor WhatsApp</label>
+          <input type="tel" name="wa" required placeholder="0812xxxxxx" class="input-control">
+          <p class="text-[10px] text-slate-500 mt-2 ml-1 italic font-medium">
+            Kami akan mengirimkan akses melalui WA & Email.
+          </p>
+        </div>
+
+        <!-- Badge Campaign Aktif -->
+        <div class="flex justify-center pt-2">
+          <span class="badge-campaign text-[9px] font-black px-4 py-1.5 rounded-full border border-white/10 uppercase tracking-widest shadow-sm">
+            <span id="dynamicCampaignLabel">CAMPAIGN</span>: <span id="currentCampaign">GENERAL</span>
+          </span>
+        </div>
+
+        <!-- Tombol CTA (Teks Dinamis) -->
+        <button type="submit" id="submitBtn" class="btn-cta w-full py-5 rounded-xl font-bold text-lg shadow-lg mt-4"></button>
+
+        <!-- Privacy Note -->
+        <div class="flex items-center justify-center gap-2 mt-6 opacity-60">
+          <i data-lucide="shield-check" class="w-3 h-3 text-indigo-400"></i>
+          <p class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter text-center">
+            Data Anda Aman. Kami Menjamin Privasi 100%.
+          </p>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tampilan Sukses (Muncul setelah submit) -->
+    <div id="successState" class="hidden text-center py-10 animate-in">
+      <div class="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-indigo-500/20 shadow-inner">
+        <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+      <h2 class="text-2xl font-bold mb-2">Berhasil Terkirim!</h2>
+      <p id="successMsg" class="text-slate-400 text-sm mb-8 leading-relaxed"></p>
+      <div class="inline-flex items-center gap-3 px-6 py-3 bg-white/5 rounded-2xl border border-white/10">
+        <div class="w-2 h-2 bg-indigo-500 rounded-full animate-ping"></div>
+        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Mengarahkan Halaman...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Branding -->
+  <div class="mt-12 text-center opacity-30">
+    <p class="text-[10px] text-slate-500 font-black tracking-[0.3em] uppercase">
+      &copy; <span id="footerYear"></span> <span id="footerAppName"></span>.
+    </p>
+  </div>
+
+  <script>
+    /**
+     * 1. URL WEB APP GOOGLE SCRIPT YANG SUDAH TERPASANG
+     */
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzXlMjRlKGybOmFvqukScuNr02qKs4VR46m3tIPep6ahuVkdPU0w0dGjhwJQ0YlQHuWew/exec"; 
+
+    // Ambil ID Campaign dari URL Parameter (?campaign=id)
+    const urlParams = new URLSearchParams(window.location.search);
+    const campaignId = urlParams.get('campaign') || "GENERAL";
+    let appSettings = {};
+
+    /**
+     * Mengambil data pengaturan secara dinamis dari API Google Apps Script
+     */
+    async function initPage() {
+      const loaderText = document.getElementById('loader-text');
+      const loaderSpinner = document.getElementById('loader-spinner');
+
+      // Validasi URL
+      if (!WEB_APP_URL || WEB_APP_URL.includes("MASUKKAN_URL")) {
+        loaderSpinner.style.display = 'none';
+        loaderText.innerHTML = `<span class="text-rose-500">URL Web App Belum Diisi</span><br><span class="text-white/40 lowercase normal-case text-[9px]">Silakan masukkan URL hasil deploy Google Apps Script ke variabel WEB_APP_URL di dalam kode index.html</span>`;
+        loaderText.classList.remove('animate-pulse');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${WEB_APP_URL}?action=getSettings&campaign=${campaignId}`);
+        if (!response.ok) throw new Error("Gagal mengambil data");
+        
+        appSettings = await response.json();
+        
+        // Render UI secara dinamis berdasarkan data dari API
+        document.title = appSettings.appName;
+        document.getElementById('dynamicAppName').innerText = appSettings.appName;
+        document.getElementById('dynamicTagline').innerText = appSettings.tagline;
+        document.getElementById('submitBtn').innerText = appSettings.btnText;
+        document.getElementById('dynamicCampaignLabel').innerText = appSettings.campaignLabel;
+        document.getElementById('currentCampaign').innerText = campaignId;
+        document.getElementById('campaignInput').value = campaignId;
+        document.getElementById('footerAppName').innerText = appSettings.appName;
+        document.getElementById('footerYear').innerText = new Date().getFullYear();
+
+        // Tampilkan Logo jika disetting ON
+        if (appSettings.showLogo && appSettings.logoUrl) {
+          document.getElementById('dynamicLogo').src = appSettings.logoUrl;
+          document.getElementById('logoWrapper').classList.remove('hidden');
+        }
+
+        // Hilangkan loader dan tampilkan konten
+        document.getElementById('loader-overlay').style.opacity = '0';
+        setTimeout(() => {
+          document.getElementById('loader-overlay').remove();
+          document.body.style.opacity = '1';
+          lucide.createIcons();
+        }, 500);
+
+      } catch (err) {
+        console.error("Koneksi Error:", err);
+        loaderSpinner.style.display = 'none';
+        loaderText.innerHTML = `
+          <div class="text-center">
+            <p class="text-rose-500 font-bold mb-2 uppercase tracking-widest text-xs">⚠️ Server Error</p>
+            <p class="text-white/40 text-[10px] normal-case lowercase">Pastikan URL Web App sudah benar dan sudah di-deploy dengan akses 'Anyone'.</p>
+          </div>
+        `;
+        loaderText.classList.remove('animate-pulse');
+      }
+    }
+
+    /**
+     * Mengangani pengiriman form (Submit) ke Backend GAS via POST
+     */
+    async function handleSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const originalText = btn.innerText;
+      
+      // Update Button State
+      btn.innerText = "⏳ SEDANG MEMPROSES...";
+      btn.disabled = true;
+      btn.style.filter = "grayscale(1)";
+
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        /**
+         * Mengirim data menggunakan mode 'no-cors' 
+         * Apps Script seringkali tidak mendukung CORS Preflight JSON secara langsung.
+         * Mode 'text/plain' memastikan data terkirim tanpa blokir browser.
+         */
+        await fetch(WEB_APP_URL, {
+          method: 'POST',
+          mode: 'no-cors', 
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify(data)
+        });
+
+        // Tampilkan UI Sukses
+        document.getElementById('formWrapper').classList.add('hidden');
+        document.getElementById('successState').classList.remove('hidden');
+        document.getElementById('successMsg').innerText = "Terima kasih! Data pendaftaran Anda telah kami terima dan pesan otomatis sedang dikirim.";
+        
+        // Redirect otomatis sesuai pengaturan
+        if (appSettings.redirectUrl) {
+          setTimeout(() => { 
+            window.location.href = appSettings.redirectUrl; 
+          }, 3000);
+        }
+
+      } catch (err) {
+        alert("Terjadi kesalahan koneksi jaringan.");
+        btn.disabled = false;
+        btn.innerText = originalText;
+        btn.style.filter = "none";
+      }
+    }
+
+    // Eksekusi inisialisasi saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', initPage);
+  </script>
+</body>
+</html>
