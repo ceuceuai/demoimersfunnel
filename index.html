@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loading...</title>
+  <title>iMersFunnel | Menghubungkan...</title>
   
   <!-- Tailwind CSS Framework -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -16,8 +16,8 @@
   
   <style>
     /**
-     * RESET & BASE STYLES
-     * Mengatur tampilan dasar body dengan background gradient radial
+     * TAMPILAN DASAR & BACKGROUND
+     * Menggunakan radial gradient untuk kesan kedalaman (depth) yang premium.
      */
     body { 
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -30,18 +30,18 @@
       justify-content: center; 
       padding: 20px; 
       opacity: 0;
-      transition: opacity 0.6s ease-in-out;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     /**
      * GLASSMORPHISM EFFECT
-     * Memberikan efek kaca transparan pada kartu utama
+     * Efek kaca transparan pada form utama.
      */
     .glass { 
       background: rgba(255, 255, 255, 0.05); 
-      backdrop-filter: blur(20px); 
+      backdrop-filter: blur(24px); 
       border: 1px solid rgba(255, 255, 255, 0.1); 
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); 
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); 
       border-radius: 1.5rem; 
       padding: 2.5rem; 
       width: 100%; 
@@ -52,63 +52,53 @@
     }
 
     /**
-     * FORM INPUT STYLES
-     * Desain input field yang modern dan responsif
+     * FORM INPUT STYLING
      */
     .input-control { 
-      background: rgba(30, 41, 59, 0.5); 
+      background: rgba(30, 41, 59, 0.6); 
       border: 1px solid rgba(255, 255, 255, 0.1); 
       width: 100%; 
       padding: 1.1rem 1.3rem; 
       border-radius: 0.85rem; 
       margin-top: 0.6rem; 
       outline: none; 
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+      transition: all 0.3s ease; 
       color: white; 
       font-size: 0.95rem;
     }
     
     .input-control:focus { 
       border-color: #6366f1; 
-      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15); 
-      background: rgba(30, 41, 59, 0.7);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2); 
+      background: rgba(30, 41, 59, 0.8);
     }
 
     /**
-     * CALL TO ACTION BUTTON
-     * Tombol dengan gradient warna premium (Indigo to Purple)
+     * BUTTON CTA STYLING
+     * Gradient indigo ke purple dengan efek hover transform.
      */
     .btn-cta { 
       background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); 
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       box-shadow: 0 12px 20px -5px rgba(99, 102, 241, 0.4);
       cursor: pointer;
+      font-weight: 800;
     }
     
     .btn-cta:hover { 
-      transform: translateY(-3px) scale(1.01); 
+      transform: translateY(-3px) scale(1.02); 
       filter: brightness(1.1);
       box-shadow: 0 20px 30px -10px rgba(99, 102, 241, 0.5);
     }
 
-    .btn-cta:active {
-      transform: translateY(0) scale(0.98);
-    }
-
-    /**
-     * BADGE STYLES
-     * Label kecil untuk menampilkan ID Campaign
-     */
-    .badge-campaign {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #94a3b8;
-      backdrop-filter: blur(5px);
+    .btn-cta:disabled {
+      filter: grayscale(1);
+      cursor: not-allowed;
+      opacity: 0.7;
     }
 
     /**
      * LOADING OVERLAY
-     * Menutupi layar saat sinkronisasi data API pertama kali
      */
     #loader-overlay {
       position: fixed;
@@ -123,69 +113,63 @@
 
     /**
      * ANIMATIONS
-     * Mengatur efek transisi saat elemen muncul
      */
     .animate-in {
-      animation: fadeInEffect 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: fadeInEffect 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     
     @keyframes fadeInEffect {
       from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    /* Efek fade khusus untuk status sukses */
-    .animate-success {
-      animation: successAppear 0.6s ease-out forwards;
-    }
-    @keyframes successAppear {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
-    }
   </style>
 </head>
 <body>
 
   <!-- LAYER 1: LOADING SCREEN -->
-  <!-- Muncul otomatis saat window dimuat sebelum data API siap -->
   <div id="loader-overlay">
-    <div class="flex flex-col items-center gap-6 text-center px-8">
-      <div id="loader-spinner" class="w-14 h-14 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+    <div class="flex flex-col items-center gap-6 text-center">
+      <div id="loader-spinner" class="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
       <div class="space-y-2">
-        <p id="loader-text" class="text-[11px] font-extrabold text-indigo-400 uppercase tracking-[0.4em] animate-pulse">
-          Menghubungkan Server...
-        </p>
+        <p id="loader-text" class="text-[11px] font-black text-indigo-400 uppercase tracking-[0.4em] animate-pulse">Menghubungkan Server...</p>
         <p class="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Sinkronisasi Database Aktif</p>
       </div>
     </div>
   </div>
 
-  <!-- LAYER 2: BRANDING HEADER -->
-  <!-- Menampilkan Logo, Nama Aplikasi, dan Tagline secara Dinamis -->
+  <!-- LAYER 2: DYNAMIC BRANDING HEADER -->
   <header class="text-center animate-in relative z-10">
-    <div id="logoWrapper" class="hidden transform transition-all duration-700">
-      <img id="dynamicLogo" src="" alt="Logo" class="h-16 w-auto mx-auto mb-8 object-contain drop-shadow-[0_10px_20px_rgba(99,102,241,0.3)]">
+    <!-- Logo dinamis (Muncul jika URL Logo diisi di Campaign/Global) -->
+    <div id="logoWrapper" class="hidden transform transition-all duration-700 mb-8">
+      <img id="dynamicLogo" src="" alt="Brand Logo" class="h-20 w-auto mx-auto object-contain drop-shadow-[0_10px_20px_rgba(99,102,241,0.4)]">
     </div>
+    
+    <!-- Nama Aplikasi Dinamis -->
     <h1 id="dynamicAppName" class="text-4xl font-extrabold tracking-tighter text-white/95 uppercase tracking-widest bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
       <!-- Data dari API -->
     </h1>
+    
+    <!-- Tagline Dinamis -->
     <p id="dynamicTagline" class="text-slate-400 text-sm mt-3 font-medium max-w-xs mx-auto leading-relaxed opacity-80">
       <!-- Data dari API -->
     </p>
   </header>
 
-  <!-- LAYER 3: MAIN CARD CONTAINER -->
+  <!-- LAYER 3: MAIN CONTENT CARD -->
   <main class="glass animate-in relative z-10" style="animation-delay: 0.25s;">
     
-    <!-- Bagian 3.1: Form Pengumpulan Data -->
+    <!-- STATE 3.1: DATA COLLECTION FORM -->
     <div id="formWrapper" class="transition-all duration-500">
-      <h2 class="text-xl font-extrabold mb-10 text-center text-white tracking-tight">Daftar Sekarang</h2>
+      <div class="text-center mb-10">
+        <h2 class="text-xl font-extrabold text-white tracking-tight">Daftar Sekarang</h2>
+        <div class="w-12 h-1 bg-indigo-500 mx-auto mt-3 rounded-full opacity-50"></div>
+      </div>
       
       <form id="leadForm" onsubmit="handleSubmit(event)" class="space-y-7">
-        <!-- Input Tersembunyi: Campaign ID -->
+        <!-- Campaign ID Hidden Field -->
         <input type="hidden" id="campaignInput" name="campaign" value="GENERAL">
         
-        <!-- Field: Nama -->
+        <!-- Field Nama -->
         <div class="group">
           <label class="text-[11px] font-bold text-slate-500 ml-1 uppercase tracking-widest group-focus-within:text-indigo-400 transition-colors">
             Nama Lengkap
@@ -193,7 +177,7 @@
           <input type="text" name="nama" required placeholder="Contoh: Budi Santoso" class="input-control">
         </div>
 
-        <!-- Field: Email -->
+        <!-- Field Email -->
         <div class="group">
           <label class="text-[11px] font-bold text-slate-500 ml-1 uppercase tracking-widest group-focus-within:text-indigo-400 transition-colors">
             Email Aktif
@@ -201,49 +185,35 @@
           <input type="email" name="email" required placeholder="budi@email.com" class="input-control">
         </div>
 
-        <!-- Field: WhatsApp -->
+        <!-- Field WhatsApp -->
         <div class="group">
           <label class="text-[11px] font-bold text-slate-500 ml-1 uppercase tracking-widest group-focus-within:text-indigo-400 transition-colors">
             Nomor WhatsApp
           </label>
           <input type="tel" name="wa" required placeholder="0812xxxxxx" class="input-control">
-          <p class="text-[10px] text-slate-500 mt-3 ml-1 italic font-semibold opacity-70">
-            Akses akan dikirimkan melalui WhatsApp & Email.
-          </p>
         </div>
 
-        <!-- Badge Campaign Status -->
-        <div class="flex justify-center pt-3">
-          <span class="badge-campaign text-[9px] font-black px-5 py-2 rounded-full border border-white/10 uppercase tracking-[0.2em] shadow-inner">
-            <span id="dynamicCampaignLabel">CAMPAIGN</span>: <span id="currentCampaign" class="text-indigo-400">GENERAL</span>
-          </span>
-        </div>
-
-        <!-- Tombol Submit Utama -->
+        <!-- Tombol Submit Dinamis -->
         <button type="submit" id="submitBtn" class="btn-cta w-full py-5 rounded-2xl font-black text-lg shadow-2xl mt-6 uppercase tracking-wider">
-          <!-- Teks dari API -->
+          <!-- Teks Tombol dari API -->
         </button>
 
-        <!-- Privacy & Security Note -->
-        <div class="flex items-center justify-center gap-3 mt-8 py-3 px-4 bg-white/5 rounded-xl border border-white/5 opacity-70">
+        <!-- Trust Badge -->
+        <div class="flex items-center justify-center gap-3 mt-8 py-3 px-4 bg-white/5 rounded-xl border border-white/5 opacity-60">
           <i data-lucide="shield-check" class="w-4 h-4 text-indigo-400"></i>
-          <p class="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest text-center">
-            Data Anda Aman & Terenkripsi 100%.
-          </p>
+          <p class="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest">Data Anda Aman 100%</p>
         </div>
       </form>
     </div>
 
-    <!-- Bagian 3.2: Tampilan Sukses (Success State) -->
-    <div id="successState" class="hidden text-center py-12 animate-success">
-      <div class="w-24 h-24 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-indigo-500/20 shadow-inner">
-        <svg class="w-12 h-12 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-        </svg>
+    <!-- STATE 3.2: SUCCESS STATE -->
+    <div id="successState" class="hidden text-center py-12">
+      <div class="w-24 h-24 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-indigo-500/20">
+        <i data-lucide="party-popper" class="w-12 h-12 text-indigo-400"></i>
       </div>
       <h2 class="text-3xl font-black mb-4 text-white tracking-tighter uppercase">Berhasil!</h2>
       <p id="successMsg" class="text-slate-400 text-sm mb-10 leading-relaxed font-medium px-4">
-        Data pendaftaran Anda telah kami terima dan pesan otomatis sedang dikirim.
+        Data pendaftaran Anda telah kami terima. Pesan otomatis sedang dikirim ke WhatsApp Anda.
       </p>
       <div class="inline-flex items-center gap-3 px-6 py-3 bg-white/5 rounded-2xl border border-white/10">
         <div class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-ping"></div>
@@ -253,146 +223,122 @@
   </main>
 
   <!-- LAYER 4: FOOTER SECTION -->
-  <footer class="mt-16 text-center opacity-40 group hover:opacity-80 transition-opacity duration-500">
+  <footer class="mt-16 text-center opacity-30">
     <p class="text-[10px] text-slate-500 font-black tracking-[0.4em] uppercase">
-      &copy; <span id="footerYear"></span> <span id="footerAppName"></span>. 
-      <br><span class="mt-2 block font-medium opacity-50">Powering Smart Lead Generation.</span>
+      &copy; 2026 iMersFunnel Pro &bull; Smart Funnel Engine
     </p>
   </footer>
 
-  <!-- SCRIPT LOGIC: API SINKRONISASI & FORM HANDLER -->
+  <!-- SCRIPT LOGIC: SYNC & FORM HANDLING -->
   <script>
     /**
-     * KONFIGURASI BACKEND
+     * KONFIGURASI BACKEND API
      * URL Web App dari Google Apps Script yang sudah di-deploy secara publik.
      */
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzXlMjRlKGybOmFvqukScuNr02qKs4VR46m3tIPep6ahuVkdPU0w0dGjhwJQ0YlQHuWew/exec"; 
 
     /**
      * LOGIKA DETEKSI CAMPAIGN
-     * Mendeteksi ID Campaign dari dua sumber:
-     * 1. Query Parameter (?campaign=id)
-     * 2. URL Path (/id) - Didukung oleh vercel.json rewrite
+     * Mendeteksi ID Campaign dari Path URL (Vercel Rewrite) atau Query Parameter.
      */
     const urlParams = new URLSearchParams(window.location.search);
     const pathSegments = window.location.pathname.split('/').filter(Boolean);
     const pathCampaign = pathSegments.pop();
     const campaignId = urlParams.get('campaign') || pathCampaign || "GENERAL";
     
-    let appSettings = {}; // Objek untuk menampung pengaturan dari server
+    let appSettings = {}; // Menampung data branding & redirect dari server
 
     /**
-     * FUNGSI: INISIALISASI HALAMAN
-     * Mengambil data pengaturan secara dinamis menggunakan Fetch API dari Backend GAS.
+     * FUNGSI: INISIALISASI HALAMAN (FETCH SETTINGS)
      */
     async function initPage() {
+      const loaderOverlay = document.getElementById('loader-overlay');
       const loaderText = document.getElementById('loader-text');
       const loaderSpinner = document.getElementById('loader-spinner');
-      const currentYear = new Date().getFullYear();
-
-      // Validasi URL Backend sebelum eksekusi
-      if (!WEB_APP_URL || WEB_APP_URL.includes("MASUKKAN_URL")) {
-        loaderSpinner.style.display = 'none';
-        loaderText.innerHTML = `
-          <span class="text-rose-500 font-black">URL Backend Belum Diatur</span><br>
-          <span class="text-white/40 normal-case font-bold text-[9px] mt-2 block tracking-widest uppercase">
-            Cek variabel WEB_APP_URL di index.html
-          </span>`;
-        loaderText.classList.remove('animate-pulse');
-        return;
-      }
 
       try {
-        // Melakukan request GET ke backend untuk mengambil data branding & campaign
+        // Melakukan request GET ke backend untuk mengambil data Branding Dinamis
         const apiPath = `${WEB_APP_URL}?action=getSettings&campaign=${campaignId}`;
         const response = await fetch(apiPath);
         
-        if (!response.ok) throw new Error("Server Response Error");
+        if (!response.ok) throw new Error("Gagal terhubung ke Server");
         
         appSettings = await response.json();
         
-        // Menerapkan data Branding ke Elemen DOM
+        // --- TERAPKAN BRANDING DINAMIS (Penting!) ---
+        // Judul Tab Browser
         document.title = appSettings.appName || "iMersFunnel";
+        
+        // Judul Aplikasi di Header
         document.getElementById('dynamicAppName').innerText = appSettings.appName || "iMersFunnel";
+        
+        // Tagline Aplikasi
         document.getElementById('dynamicTagline').innerText = appSettings.tagline || "";
+        
+        // Teks Tombol CTA
         document.getElementById('submitBtn').innerText = appSettings.btnText || "Daftar Sekarang";
-        document.getElementById('dynamicCampaignLabel').innerText = appSettings.campaignLabel || "CAMPAIGN";
-        document.getElementById('currentCampaign').innerText = campaignId;
+        
+        // Pasang Campaign ID ke input hidden
         document.getElementById('campaignInput').value = campaignId;
-        document.getElementById('footerAppName').innerText = appSettings.appName || "iMersFunnel";
-        document.getElementById('footerYear').innerText = currentYear;
 
-        // Logika tampilan Logo
+        // Logika Tampilan Logo (Dinamis per Campaign)
         if (appSettings.showLogo && appSettings.logoUrl) {
           const logoImg = document.getElementById('dynamicLogo');
           logoImg.src = appSettings.logoUrl;
           document.getElementById('logoWrapper').classList.remove('hidden');
         }
 
-        // Transisi: Menghilangkan Loader & Memunculkan Body
-        const loaderOverlay = document.getElementById('loader-overlay');
+        // Transisi: Menghilangkan Loader
         loaderOverlay.style.opacity = '0';
-        
         setTimeout(() => {
           loaderOverlay.remove();
           document.body.style.opacity = '1';
-          // Inisialisasi ikon Lucide setelah elemen dirender
-          lucide.createIcons();
+          lucide.createIcons(); // Render icon Lucide
         }, 600);
 
       } catch (err) {
-        console.error("Critical Connection Error:", err);
+        console.error("Sinkronisasi Gagal:", err);
         loaderSpinner.style.display = 'none';
         loaderText.innerHTML = `
-          <div class="text-center space-y-3">
-            <p class="text-rose-500 font-black uppercase tracking-widest text-xs">⚠️ Gangguan Koneksi Server</p>
-            <p class="text-white/40 text-[9px] font-bold tracking-tighter leading-tight">
-              Pastikan Backend Apps Script sudah di-deploy<br>dan akses diatur ke 'Anyone'.
-            </p>
-          </div>
+          <span class="text-rose-500 font-black uppercase">⚠️ Koneksi Terputus</span><br>
+          <span class="text-white/40 text-[9px] mt-2 block tracking-widest uppercase">Periksa Backend Apps Script Anda</span>
         `;
-        loaderText.classList.remove('animate-pulse');
       }
     }
 
     /**
-     * FUNGSI: HANDLE FORM SUBMISSION
-     * Mengirimkan data pendaftar ke Google Apps Script via POST request.
+     * FUNGSI: HANDLE SUBMIT DATA (POST)
      */
     async function handleSubmit(e) {
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
       const originalText = btn.innerText;
       
-      // Update Status Tombol (Loading State)
+      // Update Button State (Loading)
       btn.innerText = "⏳ SEDANG MEMPROSES DATA...";
       btn.disabled = true;
-      btn.style.filter = "grayscale(1)";
-      btn.style.opacity = "0.7";
 
-      // Mengambil data dari form
-      const formElement = e.target;
-      const formData = new FormData(formElement);
+      const formData = new FormData(e.target);
       const payloadData = Object.fromEntries(formData.entries());
 
       try {
         /**
-         * PENGIRIMAN DATA (POST)
-         * Menggunakan mode 'no-cors' karena Apps Script tidak mendukung Preflight JSON dari domain luar.
-         * Mode 'text/plain' memastikan data diterima oleh doPost(e) di backend.
+         * PENGIRIMAN DATA KE GOOGLE SHEETS
+         * Menggunakan mode 'no-cors' agar tidak terblokir oleh kebijakan CORS browser.
          */
         await fetch(WEB_APP_URL, {
           method: 'POST',
           mode: 'no-cors', 
-          headers: { 'Content-Type': 'text/plain' },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payloadData)
         });
 
-        // Transisi ke State Sukses
+        // Transisi ke State Berhasil
         document.getElementById('formWrapper').classList.add('hidden');
         document.getElementById('successState').classList.remove('hidden');
-        
-        // Eksekusi Redirect otomatis jika dikonfigurasi
+        lucide.createIcons();
+
+        // Redirect otomatis jika dikonfigurasi oleh campaign terkait
         if (appSettings.redirectUrl) {
           setTimeout(() => { 
             window.location.href = appSettings.redirectUrl; 
@@ -401,18 +347,13 @@
 
       } catch (err) {
         console.error("Submit Error:", err);
-        alert("Maaf, terjadi kesalahan koneksi jaringan. Silakan coba lagi.");
+        alert("Terjadi kesalahan saat mengirim data. Silakan coba lagi.");
         btn.disabled = false;
         btn.innerText = originalText;
-        btn.style.filter = "none";
-        btn.style.opacity = "1";
       }
     }
 
-    /**
-     * EVENT LISTENER
-     * Menjalankan inisialisasi saat struktur DOM sudah siap.
-     */
+    // Jalankan inisialisasi saat struktur DOM siap
     document.addEventListener('DOMContentLoaded', initPage);
   </script>
 </body>
